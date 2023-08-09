@@ -41,6 +41,15 @@ const DownloadForm: React.FC<DownloadFormProps> = ({}) => {
               return;
             }
 
+            const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+
+            if (!linkFieldValue.match(urlRegex)) {
+              toast({
+                title: "Please at least enter a valid link.",
+              });
+              return;
+            }
+
             setIsLoading(true);
 
             toast({
