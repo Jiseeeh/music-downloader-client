@@ -47,7 +47,7 @@ const Item: React.FC<{ content: string }> = ({ content }) => {
 
   return (
     <section
-      className="p-3 rounded-md transition-colors ease-in-out delay-75 cursor-pointer hover:bg-gray-300"
+      className="p-3 rounded-md transition-colors ease-in delay-75 cursor-pointer hover:bg-gray-300"
       onClick={handleOnClick}
     >
       {content}
