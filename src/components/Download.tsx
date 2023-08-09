@@ -16,9 +16,7 @@ import { Filter } from "@/enums/Filter";
 import { DownloadFormats } from "./DownloadFormats";
 import { useToast } from "@/components/ui/use-toast";
 
-interface DownloadFormProps {}
-
-const DownloadForm: React.FC<DownloadFormProps> = ({}) => {
+const DownloadForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formats, setFormats] = useState<Media[]>([]);
   const [filterMode, setFilterMode] = useState<Filter>(Filter.ALL);
