@@ -116,10 +116,18 @@ const DownloadForm: React.FC = () => {
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={Filter.ALL}>All</SelectItem>
-              <SelectItem value={Filter.AUDIO}>Audio</SelectItem>
-              <SelectItem value={Filter.VIDEO}>Video</SelectItem>
-              <SelectItem value={Filter.VIDEO_ONLY}>Video Only</SelectItem>
+              <SelectItem value={Filter.ALL}>
+                {Filter.ALL.toUpperCase()}
+              </SelectItem>
+              <SelectItem value={Filter.AUDIO}>
+                {Filter.AUDIO.toUpperCase()}
+              </SelectItem>
+              <SelectItem value={Filter.VIDEO}>
+                {Filter.VIDEO.toUpperCase()}
+              </SelectItem>
+              <SelectItem value={Filter.VIDEO_ONLY}>
+                {Filter.VIDEO_ONLY.toUpperCase()}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
