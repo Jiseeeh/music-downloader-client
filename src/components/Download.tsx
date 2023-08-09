@@ -23,7 +23,7 @@ const DownloadForm: React.FC = () => {
   const [linkFieldValue, setLinkFieldValue] = useState("");
   const { toast } = useToast();
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -91,7 +91,7 @@ const DownloadForm: React.FC = () => {
 
   return (
     <>
-      <form className="p-2 grid place-items-center" onSubmit={onSubmit}>
+      <form className="p-2 grid place-items-center" onSubmit={handleSubmit}>
         <section className="flex w-full max-w-sm items-center space-x-2">
           <Input
             type="text"
