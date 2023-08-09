@@ -50,6 +50,24 @@ const DownloadForm: React.FC<DownloadFormProps> = ({}) => {
               return;
             }
 
+            let links = localStorage.getItem("recentLinks");
+
+            let recentLinks: string[] = [];
+
+            if (links) {
+              recentLinks = JSON.parse(links);
+
+              // prevent entering existing link
+              if (recentLinks.includes(linkFieldValue)) return;
+
+              recentLinks.push(linkFieldValue);
+
+              localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
+            } else {
+              recentLinks.push(linkFieldValue);
+              localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
+            }
+
             setIsLoading(true);
 
             toast({
