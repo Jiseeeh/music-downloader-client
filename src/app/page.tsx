@@ -11,7 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
+import { RecentLinks } from "@/components/RecentLinks";
 import { DownloadForm } from "@/components/Download";
 
 export default function Home() {
@@ -30,7 +30,7 @@ export default function Home() {
             <SheetHeader>
               <SheetTitle>Recently used links</SheetTitle>
               <SheetDescription>
-                These are the links you have used recently.
+                <RecentLinks />
               </SheetDescription>
             </SheetHeader>
           </SheetContent>
