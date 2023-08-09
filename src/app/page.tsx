@@ -29,9 +29,7 @@ export default function Home() {
           <SheetContent side={"left"}>
             <SheetHeader>
               <SheetTitle>Recently used links</SheetTitle>
-              <SheetDescription>
-                <RecentLinks />
-              </SheetDescription>
+              <RecentLinks />
             </SheetHeader>
           </SheetContent>
         </Sheet>
