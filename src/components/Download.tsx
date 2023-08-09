@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,78 +25,75 @@ const DownloadForm: React.FC<DownloadFormProps> = ({}) => {
   const [linkFieldValue, setLinkFieldValue] = useState("");
   const { toast } = useToast();
 
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      if (!linkFieldValue) {
+        toast({
+          title: "Please input a link.",
+        });
+
+        return;
+      }
+
+      const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+
+      if (!linkFieldValue.match(urlRegex)) {
+        toast({
+          title: "Please at least enter a valid link.",
+        });
+        return;
+      }
+
+      let links = localStorage.getItem("recentLinks");
+
+      let recentLinks: string[] = [];
+
+      if (links) {
+        recentLinks = JSON.parse(links);
+
+        // prevent entering existing link
+        if (recentLinks.includes(linkFieldValue)) return;
+
+        recentLinks.push(linkFieldValue);
+
+        localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
+      } else {
+        recentLinks.push(linkFieldValue);
+        localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
+      }
+
+      setIsLoading(true);
+
+      toast({
+        title: "Please wait while we are getting the link's data.",
+        description:
+          "You can click on your preferred format once the loading is done.",
+      });
+
+      const response = await fetch(
+        `http://localhost:3001/api/download/info?url=${linkFieldValue}`
+      );
+
+      const data = await response.json();
+      const downloadInfo: Media[] = data.downloadInfo;
+
+      setFormats(downloadInfo.filter((format) => format.type !== "unknown"));
+    } catch (error) {
+      toast({
+        title: "Sorry for the inconvenience!",
+        description:
+          "Please use a valid youtube video link as it has the most support.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
-      <form
-        className="p-2 grid place-items-center"
-        onSubmit={async (e) => {
-          e.preventDefault();
-
-          try {
-            if (!linkFieldValue) {
-              toast({
-                title: "Please input a link.",
-              });
-
-              return;
-            }
-
-            const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-
-            if (!linkFieldValue.match(urlRegex)) {
-              toast({
-                title: "Please at least enter a valid link.",
-              });
-              return;
-            }
-
-            let links = localStorage.getItem("recentLinks");
-
-            let recentLinks: string[] = [];
-
-            if (links) {
-              recentLinks = JSON.parse(links);
-
-              // prevent entering existing link
-              if (recentLinks.includes(linkFieldValue)) return;
-
-              recentLinks.push(linkFieldValue);
-
-              localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
-            } else {
-              recentLinks.push(linkFieldValue);
-              localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
-            }
-
-            setIsLoading(true);
-
-            toast({
-              title: "Please wait while we are getting the link's data.",
-              description:
-                "You can click on your preferred format once the loading is done.",
-            });
-
-            const response = await fetch(
-              `http://localhost:3001/api/download/info?url=${linkFieldValue}`
-            );
-
-            const data = await response.json();
-            const downloadInfo: Media[] = data.downloadInfo;
-
-            setFormats(
-              downloadInfo.filter((format) => format.type !== "unknown")
-            );
-          } catch (error) {
-            toast({
-              title: "Sorry for the inconvenience!",
-              description:
-                "Please use a valid youtube video link as it has the most support.",
-            });
-          } finally {
-            setIsLoading(false);
-          }
-        }}
-      >
+      <form className="p-2 grid place-items-center" onSubmit={onSubmit}>
         <section className="flex w-full max-w-sm items-center space-x-2">
           <Input
             type="text"
