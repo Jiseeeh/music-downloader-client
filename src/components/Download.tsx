@@ -48,13 +48,12 @@ const DownloadForm: React.FC = () => {
 
       let recentLinks: string[] = [];
 
-      if (links) {
+      if (links !== null) {
         recentLinks = JSON.parse(links);
 
         // prevent entering existing link
-        if (recentLinks.includes(linkFieldValue)) return;
-
-        recentLinks.push(linkFieldValue);
+        if (!recentLinks.includes(linkFieldValue))
+          recentLinks.push(linkFieldValue);
 
         localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
       } else {
@@ -91,19 +90,23 @@ const DownloadForm: React.FC = () => {
 
   return (
     <>
-      <form className="p-2 grid place-items-center" onSubmit={handleSubmit}>
-        <section className="flex w-full max-w-sm items-center space-x-2">
+      <section className="p-2 grid place-items-center">
+        <form
+          className="flex w-full max-w-sm items-center space-x-2"
+          onSubmit={handleSubmit}
+        >
           <Input
             type="text"
             placeholder="Link"
             value={linkFieldValue}
             onChange={(e) => setLinkFieldValue(e.target.value)}
           />
+
           <Button type="submit" disabled={isLoading}>
             Check
           </Button>
-        </section>
-      </form>
+        </form>
+      </section>
       <section className="flex flex-col max-w-5xl mx-auto">
         <div className="self-end p-3">
           <Select
