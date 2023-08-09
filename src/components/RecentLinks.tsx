@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 
 import { useToast } from "./ui/use-toast";
 
-interface RecentLinksProps {}
-
-const RecentLinks: React.FC<RecentLinksProps> = ({}) => {
+const RecentLinks: React.FC = () => {
   const [recentLinks, setRecentLinks] = useState([]);
 
   useEffect(() => {
