@@ -48,6 +48,7 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
 
             toast({
               title: "Please wait while we are getting your file.",
+              description: "It will show up as long as it is finished.",
               duration: 10000,
             });
 
