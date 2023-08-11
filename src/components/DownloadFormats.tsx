@@ -72,6 +72,10 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
               const blob = await response.blob();
 
               download(blob, format.fileName, mimeType);
+
+              toast({
+                title: "Downloading done!",
+              });
             } catch (error) {
               toast({
                 title: "Sorry for the inconvenience!",
