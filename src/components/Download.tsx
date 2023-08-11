@@ -81,7 +81,7 @@ const DownloadForm: React.FC = () => {
       toast({
         title: "Sorry for the inconvenience!",
         description:
-          "Please use a valid youtube video link as it has the most support.",
+          "There must be an error on the server, please try again later.",
       });
     } finally {
       setIsLoading(false);
