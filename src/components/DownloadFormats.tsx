@@ -1,5 +1,5 @@
 import download from "downloadjs";
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import { BarLoader } from "react-spinners";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,22 +7,27 @@ import { useToast } from "@/components/ui/use-toast";
 import { Media } from "@/interfaces/Media";
 import { Button } from "./ui/button";
 import { Filter } from "@/enums/Filter";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface DownloadFormatsProps {
   isLoading: boolean;
   formats: Media[];
-  filter: Filter;
   url: string;
 }
 
 const DownloadFormats: React.FC<DownloadFormatsProps> = ({
   isLoading,
   formats,
-  filter,
   url,
 }) => {
   const skeletons = generateSkeletons();
   const [isDownloading, setIsDownloading] = useState(false);
+  const [filterMode, setFilterMode] = useState<Filter>(Filter.AUDIO);
   const { toast } = useToast();
 
   const handleClick = (format: Media) => {
@@ -79,18 +84,22 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
   };
 
   const tiles = formats
-    .filter((format) => {
-      if (filter === "all") return true;
-
-      return format.type === filter;
-    })
+    .filter((format) => format.type === filterMode)
     .map((format) => {
       return (
         <Button key={format.id} type="button" onClick={handleClick(format)}>
-          {format.type}({format.quality})
+          {format.quality.toUpperCase()}
         </Button>
       );
     });
+
+  const TilesGrid: React.FC<{ tiles: ReactNode }> = ({ tiles }) => {
+    return (
+      <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {tiles}
+      </div>
+    );
+  };
 
   if (!isLoading) {
     return (
@@ -100,9 +109,48 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
             <BarLoader width={"100%"} height={6} color="#272e3f" />
           </div>
         )}
-        <section className="mt-2 p-2 grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 lg:grid-cols-5">
-          {tiles}
-        </section>
+        <div className="p-3">
+          <Accordion
+            type="single"
+            collapsible
+            className="max-w-5xl"
+            defaultValue={Filter.ALL} // so that no accordion item will be opened asap
+            onValueChange={(val: Filter) => setFilterMode(val)}
+          >
+            <AccordionItem value={Filter.AUDIO}>
+              <AccordionTrigger>{Filter.AUDIO.toUpperCase()}</AccordionTrigger>
+              <AccordionContent>
+                {tiles.length > 0 ? (
+                  <TilesGrid tiles={tiles} />
+                ) : (
+                  "Audio types will show here."
+                )}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value={Filter.VIDEO}>
+              <AccordionTrigger>{Filter.VIDEO.toUpperCase()}</AccordionTrigger>
+              <AccordionContent>
+                {tiles.length !== 0 ? (
+                  <TilesGrid tiles={tiles} />
+                ) : (
+                  "Video types will show here."
+                )}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value={Filter.VIDEO_ONLY}>
+              <AccordionTrigger>
+                {Filter.VIDEO_ONLY.toUpperCase()}
+              </AccordionTrigger>
+              <AccordionContent>
+                {tiles.length !== 0 ? (
+                  <TilesGrid tiles={tiles} />
+                ) : (
+                  "Video only types will show here."
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       </>
     );
   }
