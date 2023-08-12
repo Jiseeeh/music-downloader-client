@@ -47,7 +47,7 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
 
       try {
         const response = await fetch(
-          `http://localhost:3001/api/download?url=${url}&formatId=${format.id}`
+          `${process.env.NEXT_PUBLIC_API}/api/download?url=${url}&formatId=${format.id}`
         );
 
         switch (format.extension) {

@@ -70,7 +70,7 @@ const DownloadForm: React.FC = () => {
       });
 
       const response = await fetch(
-        `http://localhost:3001/api/download/info?url=${linkFieldValue}`
+        `${process.env.NEXT_PUBLIC_API}/api/download/info?url=${linkFieldValue}`
       );
 
       const data = await response.json();
