@@ -48,26 +48,14 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
         duration: 10000,
       });
 
-      let mimeType = "";
-
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API}/api/download?url=${url}&formatId=${format.id}`
         );
 
-        switch (format.extension) {
-          case "webm": {
-            if (format.type === "audio") mimeType = "audio/webm";
-            else mimeType = "video/webm";
-            break;
-          }
-          case "mp4" || "m4a":
-            mimeType = "video/mp4";
-        }
-
         const blob = await response.blob();
 
-        download(blob, format.fileName, mimeType);
+        download(blob, format.fileName, blob.type);
 
         toast({
           title: "Downloading done!",
@@ -88,7 +76,7 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
     .map((format) => {
       return (
         <Button key={format.id} type="button" onClick={handleClick(format)}>
-          {format.quality.toUpperCase()}
+          {`${format.quality.toUpperCase()} (${format.extension})`}
         </Button>
       );
     });
@@ -156,17 +144,17 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
   }
 
   return (
-    <section className="mt-2 p-2 grid place-items-center grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 lg:grid-cols-5">
+    <section className="mt-2 p-2 gap-2 flex flex-col max-w-5xl ">
       {skeletons}
     </section>
   );
 };
 
 function generateSkeletons() {
-  return Array(5)
+  return Array(3)
     .fill(null)
     .map((_, index) => (
-      <Skeleton key={index} className="w-[100px] h-9 px-4 py-2 rounded-md" />
+      <Skeleton key={index} className="w-full h-11 px-4 py-2 rounded-md" />
     ));
 }
 
