@@ -19,7 +19,6 @@ import { useToast } from "@/components/ui/use-toast";
 const DownloadForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formats, setFormats] = useState<Media[]>([]);
-  const [filterMode, setFilterMode] = useState<Filter>(Filter.ALL);
   const [linkFieldValue, setLinkFieldValue] = useState("");
   const { toast } = useToast();
 
@@ -76,7 +75,11 @@ const DownloadForm: React.FC = () => {
       const data = await response.json();
       const downloadInfo: Media[] = data.downloadInfo;
 
-      setFormats(downloadInfo.filter((format) => format.type !== "unknown"));
+      setFormats(
+        downloadInfo.filter(
+          (format) => format.type !== "unknown" && format.quality !== "unknown"
+        )
+      );
     } catch (error) {
       toast({
         title: "Sorry for the inconvenience!",
@@ -107,37 +110,10 @@ const DownloadForm: React.FC = () => {
           </Button>
         </form>
       </section>
-      <section className="flex flex-col max-w-5xl mx-auto">
-        <div className="self-end p-3">
-          <Select
-            onValueChange={(val: Filter) => {
-              setFilterMode(val);
-            }}
-            defaultValue={filterMode}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={Filter.ALL}>
-                {Filter.ALL.toUpperCase()}
-              </SelectItem>
-              <SelectItem value={Filter.AUDIO}>
-                {Filter.AUDIO.toUpperCase()}
-              </SelectItem>
-              <SelectItem value={Filter.VIDEO}>
-                {Filter.VIDEO.toUpperCase()}
-              </SelectItem>
-              <SelectItem value={Filter.VIDEO_ONLY}>
-                {Filter.VIDEO_ONLY.toUpperCase()}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <section className="max-w-5xl mx-auto">
         <DownloadFormats
           isLoading={isLoading}
           formats={formats}
-          filter={filterMode}
           url={linkFieldValue}
         />
       </section>
