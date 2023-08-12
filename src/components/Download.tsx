@@ -5,14 +5,6 @@ import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Media } from "@/interfaces/Media";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Filter } from "@/enums/Filter";
 import { DownloadFormats } from "./DownloadFormats";
 import { useToast } from "@/components/ui/use-toast";
 
