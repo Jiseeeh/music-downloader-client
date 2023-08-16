@@ -38,13 +38,19 @@ const DownloadForm: React.FC = () => {
       let links = localStorage.getItem("recentLinks");
 
       let recentLinks: string[] = [];
+      const MAX_RECENT_LINKS = 6;
 
       if (links !== null) {
         recentLinks = JSON.parse(links);
 
         // prevent entering existing link
-        if (!recentLinks.includes(linkFieldValue))
-          recentLinks.push(linkFieldValue);
+        if (!recentLinks.includes(linkFieldValue)) {
+          if (recentLinks.length >= MAX_RECENT_LINKS) {
+            // remove first and add new
+            recentLinks.shift();
+            recentLinks.push(linkFieldValue);
+          } else recentLinks.push(linkFieldValue);
+        }
 
         localStorage.setItem("recentLinks", JSON.stringify(recentLinks));
       } else {
