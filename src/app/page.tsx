@@ -6,7 +6,6 @@ import { TypographyH3 } from "@/components/typography/TypographyH3";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
