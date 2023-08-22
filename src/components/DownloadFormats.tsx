@@ -52,10 +52,22 @@ const DownloadFormats: React.FC<DownloadFormatsProps> = ({
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API}/api/download?url=${url}&formatId=${format.id}`
         );
+        let mimeType = "";
+
+        switch (format.extension) {
+          case "webm": {
+            if (format.type === "audio") mimeType = "audio/webm";
+            else mimeType = "video/webm";
+            break;
+          }
+          case "mp4":
+          case "m4a":
+            mimeType = "video/mp4";
+        }
 
         const blob = await response.blob();
 
-        download(blob, format.fileName, blob.type);
+        download(blob, format.fileName, mimeType);
 
         toast({
           title: "Downloading done!",
